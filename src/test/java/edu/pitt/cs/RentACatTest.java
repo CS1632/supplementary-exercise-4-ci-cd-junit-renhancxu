@@ -11,7 +11,6 @@ import org.mockito.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RentACatTest {
-
 	/**
 	 * The test fixture for this JUnit test. Test fixture: a fixed state of a set of
 	 * objects used as a baseline for running tests. The test fixture is initialized
@@ -37,12 +36,21 @@ public class RentACatTest {
 
 		// 2. Create an unrented Cat with ID 1 and name "Jennyanydots", assign to c1
 		// TODO: Fill in
+		c1 = Mockito.mock(Cat.class);
+		Mockito.when(c1.toString()).thenReturn("Jennyanydots");
+		Mockito.when(c1.getId()).thenReturn(1);
 
 		// 3. Create an unrented Cat with ID 2 and name "Old Deuteronomy", assign to c2
 		// TODO: Fill in
+		c2 = Mockito.mock(Cat.class);
+		Mockito.when(c2.toString()).thenReturn("Old Deuteronomy");
+		Mockito.when(c2.getId()).thenReturn(2);
 
 		// 4. Create an unrented Cat with ID 3 and name "Mistoffelees", assign to c3
 		// TODO: Fill in
+		c3 = Mockito.mock(Cat.class);
+		Mockito.when(c3.toString()).thenReturn("Mistoffelees");
+		Mockito.when(c3.getId()).thenReturn(3);
 	}
 
 	@After
@@ -64,10 +72,11 @@ public class RentACatTest {
 	 * Postconditions: Return value is null.
 	 * </pre>
 	 */
-
 	@Test
 	public void testGetCatNullNumCats0() {
 		// TODO
+		Cat cat = r.getCat(2);
+		assertNull(cat);
 	}
 
 	/**
@@ -80,10 +89,18 @@ public class RentACatTest {
 	 *                 Returned cat has an ID of 2.
 	 * </pre>
 	 */
-
 	@Test
 	public void testGetCatNumCats3() {
 		// TODO
+		r.addCat(c1);
+		r.addCat(c2);
+		r.addCat(c3);
+
+		Cat cat = r.getCat(2);
+		int id = c2.getId();
+
+		assertNotNull(cat);
+		assertEquals(2, id);
 	}
 
 	/**
@@ -95,10 +112,11 @@ public class RentACatTest {
 	 * Postconditions: Return value is false.
 	 * </pre>
 	 */
-
 	@Test
 	public void testCatAvailableFalseNumCats0() {
 		// TODO
+		boolean available = r.catAvailable(2);
+		assertFalse(available);
 	}
 
 	/**
@@ -112,10 +130,15 @@ public class RentACatTest {
 	 * Postconditions: Return value is true.
 	 * </pre>
 	 */
-
 	@Test
 	public void testCatAvailableTrueNumCats3() {
 		// TODO
+		r.addCat(c1);
+		r.addCat(c2);
+		r.addCat(c3);
+
+		boolean available = r.catAvailable(2);
+		assertTrue(available);
 	}
 
 	/**
@@ -129,10 +152,11 @@ public class RentACatTest {
 	 * Postconditions: Return value is false.
 	 * </pre>
 	 */
-
 	@Test
 	public void testCatAvailableFalseNumCats3() {
 		// TODO
+		boolean available = r.catAvailable(2);
+		assertFalse(available);
 	}
 
 	/**
@@ -144,10 +168,11 @@ public class RentACatTest {
 	 * Postconditions: Return value is false.
 	 * </pre>
 	 */
-
 	@Test
 	public void testCatExistsFalseNumCats0() {
 		// TODO
+		boolean exists = r.catExists(2);
+		assertFalse(exists);
 	}
 
 	/**
@@ -159,10 +184,15 @@ public class RentACatTest {
 	 * Postconditions: Return value is true.
 	 * </pre>
 	 */
-
 	@Test
 	public void testCatExistsTrueNumCats3() {
 		// TODO
+		r.addCat(c1);
+		r.addCat(c2);
+		r.addCat(c3);
+
+		boolean exists = r.catExists(2);
+		assertTrue(exists);
 	}
 
 	/**
@@ -174,10 +204,11 @@ public class RentACatTest {
 	 * Postconditions: Return value is "".
 	 * </pre>
 	 */
-
 	@Test
 	public void testListCatsNumCats0() {
 		// TODO
+		String list = r.listCats();
+		assertEquals("", list);
 	}
 
 	/**
@@ -190,10 +221,15 @@ public class RentACatTest {
 	 *                 Deuteronomy\nID 3. Mistoffelees\n".
 	 * </pre>
 	 */
-
 	@Test
 	public void testListCatsNumCats3() {
 		// TODO
+		r.addCat(c1);
+		r.addCat(c2);
+		r.addCat(c3);
+
+		String list = r.listCats();
+		assertEquals("Jennyanydots\nOld Deuteronomy\nMistoffelees\n", list);
 	}
 
 	/**
@@ -205,10 +241,11 @@ public class RentACatTest {
 	 * Postconditions: Return value is false.
 	 * </pre>
 	 */
-
 	@Test
 	public void testRentCatFailureNumCats0() {
 		// TODO
+		boolean rented = r.rentCat(2);
+		assertEquals(false, rented);
 	}
 
 	/**
@@ -226,10 +263,20 @@ public class RentACatTest {
 	 * repository for an example of behavior verification. Refer to the
 	 * testBadgerPlayCalled method.
 	 */
-
 	@Test
 	public void testRentCatFailureNumCats3() {
 		// TODO
+		r.addCat(c1);
+		r.addCat(c2);
+		r.addCat(c3);
+		Mockito.when(c2.getRented()).thenReturn(true);
+
+		boolean rented = r.rentCat(2);
+		assertFalse(rented);
+
+		Mockito.verify(c1, Mockito.times(0)).rentCat();
+		Mockito.verify(c2, Mockito.times(0)).rentCat();
+		Mockito.verify(c3, Mockito.times(0)).rentCat();
 	}
 
 	/**
@@ -241,10 +288,11 @@ public class RentACatTest {
 	 * Postconditions: Return value is false.
 	 * </pre>
 	 */
-
 	@Test
 	public void testReturnCatFailureNumCats0() {
 		// TODO
+		boolean returned = r.returnCat(2);
+		assertFalse(returned);
 	}
 
 	/**
@@ -263,9 +311,19 @@ public class RentACatTest {
 	 * repository for an example of behavior verification. Refer to the
 	 * testBadgerPlayCalled method.
 	 */
-
 	@Test
 	public void testReturnCatNumCats3() {
 		// TODO
+		r.addCat(c1);
+		r.addCat(c2);
+		r.addCat(c3);
+
+		c2.returnCat();
+		boolean returned = r.catAvailable(2);
+		assertTrue(returned);
+
+		Mockito.verify(c1, Mockito.times(0)).returnCat();
+		Mockito.verify(c2, Mockito.times(1)).returnCat();
+		Mockito.verify(c3, Mockito.times(0)).returnCat();
 	}
 }
